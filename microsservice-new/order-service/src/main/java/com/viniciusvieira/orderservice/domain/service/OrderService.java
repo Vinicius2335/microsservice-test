@@ -23,6 +23,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public void placeOrder(OrderRequest orderRequest){
         Order order = orderMapper.toDomainOrder(orderRequest);
@@ -33,8 +34,8 @@ public class OrderService {
                 .toList();
 
         // call inventory service and place if product is in stock
-        InventoryResponse[] inventoryResponseArray = webClient.get()
-                .uri("http://localhost:8082/api/inventory",
+        InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
+                .uri("http://inventory-service/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                 .retrieve()
                 .bodyToMono(InventoryResponse[].class)
@@ -55,3 +56,14 @@ public class OrderService {
         return orderMapper.toOrderResponseList(orders);
     }
 }
+
+// referencia do codigo antes de usar o @LoadBalance no metodo em WebClientConfig
+
+/**
+ * InventoryResponse[] inventoryResponseArray = webClient.get()
+ *                 .uri("http://localhost:8082/api/inventory",
+ *                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+ *                 .retrieve()
+ *                 .bodyToMono(InventoryResponse[].class)
+ *                 .block();
+ */
