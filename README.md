@@ -1,7 +1,7 @@
 <h1 align="center">Spring Boot Microsserviço </h1>
 
 <p align="center">
-Estuando sobre Spring Boot Microsserviço.
+Estudando sobre Spring Boot Microsserviço.
 </p>
 
 <p align="center">
